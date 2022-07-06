@@ -1,28 +1,31 @@
-import React, {useState,useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Map, { Marker, Popup, NavigationControl } from 'react-map-gl';
 import CicrcleButton from '../../Atoms/CicrcleButton';
 import StyledPopupItem from '../../Atoms/StyledPopup';
+import { getCities } from '../../../helpers/getCities';
+import './style.css';
 
-
-const MyMap = ({ data, zoomIntoview }) => {
+// eslint-disable-next-line no-unused-vars
+const MyMap = ({ data, zoomIntoview, setZoomIntoview, mapboxToken }) => {
     const [viewState, setViewState] = React.useState({
         longitude: -120,
         latitude: 35,
         zoom: 6,
     });
 
+    const mainPlaces = getCities(data);
+
     const [selectedStore, setSelectedStore] = useState(null);
-    
+    console.log(data);
 
     useEffect(() => {
-        if(zoomIntoview)
+        if (zoomIntoview)
             setViewState({
                 longitude: zoomIntoview.longitude,
                 latitude: zoomIntoview.latitude,
                 zoom: 15,
             });
-
     }, [zoomIntoview]);
 
     return (
@@ -30,36 +33,56 @@ const MyMap = ({ data, zoomIntoview }) => {
             {...viewState}
             onMove={(evt) => setViewState(evt.viewState)}
             mapStyle="mapbox://styles/mapbox/streets-v9"
-            mapboxAccessToken="pk.eyJ1IjoiaWdvcml2YW5vdiIsImEiOiJjbDRteDlseHcxOXlyM2NtaDFqYm1zajBzIn0.Ih1dDKmkuHaXZpLKUaR0Iw"
+            mapboxAccessToken={mapboxToken}
         >
             <NavigationControl />
-            {data.map((place, index) => (
-                <Marker
-                    key={place.name}
-                    latitude={place.latitude}
-                    longitude={place.longitude}
-                >
-                    <CicrcleButton
-                        onClick={() => {
-                            setSelectedStore(place);
-                        }}
-                        label={index + 1}
-                    />
-                </Marker>
-            ))}
+
+            {viewState.zoom < 8 &&
+        mainPlaces.length > 0 &&
+        mainPlaces.map((place) => (
+            <Marker
+                key={place.city}
+                longitude={place.longitude}
+                latitude={place.latitude}
+            >
+                <CicrcleButton
+                    onClick={() => {
+                        setViewState({
+                            longitude: place.longitude,
+                            latitude: place.latitude,
+                            zoom: 10,
+                        });
+                    }}
+                    label={place.numberOfStores}
+                />
+            </Marker>
+        ))}
+            {viewState.zoom > 8 &&
+        data.map((store) => (
+            <Marker
+                key={store.city}
+                longitude={store.longitude}
+                latitude={store.latitude}
+            >
+                <img
+                    onClick={() => setSelectedStore(store)}
+                    src="map-marker.svg"
+                    style={{ width: '40px', height: '40px' }}
+                />
+            </Marker>
+        ))}
             {selectedStore ? (
                 <Popup
                     longitude={selectedStore.longitude}
                     latitude={selectedStore.latitude}
-                    anchor="top"
                     closeOnClick={false}
                     onClose={() => setSelectedStore(null)}
+                    className="map-box-popup"
+                    // style={{maxWidth: 'inherit', padding: '0px !important'}}
                 >
                     <StyledPopupItem
                         name={selectedStore.name}
                         address={selectedStore.address}
-                        city={selectedStore.city}
-                        country={selectedStore.country}
                     />
                 </Popup>
             ) : null}
@@ -69,11 +92,13 @@ const MyMap = ({ data, zoomIntoview }) => {
 
 MyMap.propTypes = {
     data: PropTypes.array.isRequired,
+    setZoomIntoview: PropTypes.func.isRequired,
+    mapboxToken: PropTypes.string.isRequired,
     zoomIntoview: PropTypes.object,
 };
 
 MyMap.defaultProps = {
-    zoomIntoview: null
+    zoomIntoview: null,
 };
 
 export default MyMap;

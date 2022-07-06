@@ -12,6 +12,7 @@ export const getColors = (data) => {
         },
     ];
     const iconColorArray = [];
+         
     data.forEach(() => {
         iconColorArray.push(
             iconColors[Math.floor(Math.random() * iconColors.length)]
@@ -19,3 +20,5 @@ export const getColors = (data) => {
     });
     return iconColorArray;
 };
+
+

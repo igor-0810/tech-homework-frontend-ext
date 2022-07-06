@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-// import { Sidebar } from "primereact/sidebar";
 import SideBarBox from '../../Atoms/SideBarBox';
 import { getColors } from '../../../helpers/getColors';
 
@@ -10,6 +9,7 @@ const SideBar = ({ data, setZoomIntoview }) => {
 
     return (
         <div className="h-full overflow-y-scroll p-5">
+            <h2 className='mb-3'>Stores</h2>
             {myColors &&
         data.map((item, index) => (
             <SideBarBox

@@ -6,24 +6,29 @@ import 'primeicons/primeicons.css';
 import 'primeflex/primeflex.css';
 
 import Template from './Components/Template';
-import SideBar from './Components/organisam/SideBar';
-import MyMap from './Components/organisam/MyMap';
+import SideBar from './Components/Organisam/SideBar';
+import MyMap from './Components/Organisam/MyMap';
+
+import data from './data/pois.json';
 
 
+const mapboxToken =
+  'pk.eyJ1IjoiaWdvcml2YW5vdiIsImEiOiJjbDRteDlseHcxOXlyM2NtaDFqYm1zajBzIn0.Ih1dDKmkuHaXZpLKUaR0Iw';
 
 function App() {
-
-    const data = require('./data/pois.json');
+   
     const [zoomIntoview, setZoomIntoview] = useState(null);
+ 
+
  
     return (
         
         <Template
             sideBar={<SideBar setZoomIntoview={setZoomIntoview} data={data} />}
         >
-            <MyMap data={data} zoomIntoview={zoomIntoview} />
+            <MyMap mapboxToken={mapboxToken} data={data} zoomIntoview={zoomIntoview} setZoomIntoview={setZoomIntoview}/>
         </Template>
-    
+      
     );
 }
 

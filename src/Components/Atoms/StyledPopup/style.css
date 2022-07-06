@@ -1,0 +1,27 @@
+.styled-popup {
+    display: flex;
+    padding: 10px 30px 10px 12px;
+    align-items: center;
+}
+
+.styled-avatar{
+    width: 56px;
+    height: 56px;
+    color: white;
+    background-color: #001725;
+    font-size: 25px;
+    font-weight: 600;
+    margin-right: 10px;
+}
+
+.check-icon{
+    font-size: 24px;
+    margin-left: 100px;
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 3px;
+}
+
+.check-icon:hover{
+    background-color: #f2f2f2;
+}

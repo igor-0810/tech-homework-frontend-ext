@@ -1,0 +1,13 @@
+.map-box-popup {
+    max-width: inherit !important;
+
+}
+
+.map-box-popup .mapboxgl-popup-content{
+      padding: 0;
+}
+.map-box-popup .mapboxgl-popup-close-button{
+    font-size: x-large;
+    padding: 0 5px;
+    border: 0;
+}
